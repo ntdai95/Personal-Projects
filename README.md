@@ -1,4 +1,4 @@
 # Personal Projects
 
-Consist of:
+Consists of:
 - Personal Projects for self-development
