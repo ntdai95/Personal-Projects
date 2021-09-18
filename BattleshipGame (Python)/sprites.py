@@ -1,6 +1,6 @@
 import pygame as pg
 from os import path
-from Oceanic_Warfare_settings import *
+from settings import *
 
 
 class Cruiser(pg.sprite.Sprite):

@@ -4,8 +4,8 @@ import pygame as pg
 import random
 import time
 import pickle
-from Oceanic_Warfare_settings import *
-from Oceanic_Warfare_sprites import *
+from settings import *
+from sprites import *
 
 
 class PickleHighScore:
@@ -1319,5 +1319,4 @@ class Main:
 
 
 if __name__ == "__main__":
-    instance_of_Main = Main()
-    instance_of_Main.game_start_screen()
+    Main().game_start_screen()
