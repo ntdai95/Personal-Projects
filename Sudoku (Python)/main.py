@@ -10,7 +10,7 @@ import sys
 from os import path
 import requests
 from bs4 import BeautifulSoup
-from sudoku_details import *
+from settings import *
 
 class Main:
     def __init__(self):
