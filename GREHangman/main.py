@@ -4,7 +4,7 @@ import random
 import sys
 from termcolor import colored
 # Importing the side module needed for the program
-import GRE_Hangman_gameplay
+from gameplay import Gameplay
 
 class PlayAgain:
     def playing_again(self):
@@ -67,8 +67,7 @@ class Main:
             # Creating an empty list for guessed letters to later check if the user is guessing the same letter again or not
             guessed_letters = []
             # Playing the game with the gameplay() function
-            instance_of_GamePlay = GRE_Hangman_gameplay.Gameplay()
-            guessed_word = instance_of_GamePlay.gameplay(secret_word, definition_secret_word, list_current_position, list_secret_word, wrong_guess, guessed_letters)
+            guessed_word = Gameplay().gameplay(secret_word, definition_secret_word, list_current_position, list_secret_word, wrong_guess, guessed_letters)
             # If the user wins, then prints out the congratulory message, and then end the game
             if guessed_word == secret_word:
                 print(colored(f"\nCongratulations!\nThe word was {guessed_word}.\n", "green"))

@@ -13,10 +13,9 @@
 import sys
 from os import path
 import pygame as pg
-import random
 import pickle
-from Horse_Racer_settings import *
-from Horse_Racer_sprites import *
+from settings import *
+from sprites import *
 
 
 class PickleHighScore:

@@ -1,7 +1,7 @@
 import pygame as pg
 import random
 from os import path
-from Tank_Racer_settings import *
+from settings import *
 
 
 class Player(pg.sprite.Sprite):

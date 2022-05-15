@@ -19,8 +19,8 @@ from os import path
 import pygame as pg
 import random
 import pickle
-from Tank_Racer_settings import *
-from Tank_Racer_sprites import *
+from settings import *
+from sprites import *
 
 
 class PickleHighScore:
