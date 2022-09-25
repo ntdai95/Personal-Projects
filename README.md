@@ -1,3 +1,3 @@
 # Personal Projects
 
-- Contains personal projects for self-development
+- Consists of personal projects for self-development
