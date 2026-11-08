@@ -22,13 +22,13 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE username = '{username}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE username = ?;"
+            cursor.execute(sql_query, (username,))
             used_user = cursor.fetchone()
             if used_user:
                 return {'success': False}
 
-            sql_query = f"SELECT * FROM user;"
+            sql_query = "SELECT * FROM user;"
             cursor.execute(sql_query)
             all_users = cursor.fetchall()
             used_authkeys = []
@@ -40,7 +40,7 @@ class Database:
                 if authkey not in used_authkeys:
                     break
 
-            sql_query = f'INSERT INTO user (authkey, username, hashed_password) VALUES (?, ?, ?);'
+            sql_query = 'INSERT INTO user (authkey, username, hashed_password) VALUES (?, ?, ?);'
             cursor.execute(sql_query, (authkey, username, hashed_password))
             connection.commit()
             return {'success': True, "authkey": authkey}
@@ -50,8 +50,8 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE username = '{username}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE username = ?;"
+            cursor.execute(sql_query, (username,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
@@ -66,13 +66,13 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE authkey = '{authkey}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE authkey = ?;"
+            cursor.execute(sql_query, (authkey,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
 
-            sql_query = f'INSERT INTO channel (name) VALUES (?);'
+            sql_query = 'INSERT INTO channel (name) VALUES (?);'
             cursor.execute(sql_query, (channelName,))
             connection.commit()
             return {'success': True}
@@ -82,8 +82,8 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE authkey = '{authkey}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE authkey = ?;"
+            cursor.execute(sql_query, (authkey,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
@@ -98,13 +98,13 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE authkey = '{authkey}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE authkey = ?;"
+            cursor.execute(sql_query, (authkey,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
 
-            sql_query = f'INSERT INTO message (content, username, channel_id, is_reply, replies_to) VALUES (?, ?, ?, ?, ?);'
+            sql_query = 'INSERT INTO message (content, username, channel_id, is_reply, replies_to) VALUES (?, ?, ?, ?, ?);'
             cursor.execute(sql_query, (newMessage, username, channel_id, False, None))
             connection.commit()
             return {'success': True}
@@ -114,19 +114,19 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE authkey = '{authkey}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE authkey = ?;"
+            cursor.execute(sql_query, (authkey,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
 
-            sql_query = f"SELECT * FROM message WHERE channel_id = '{channel_id}' AND is_reply = 0;"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM message WHERE channel_id = ? AND is_reply = 0;"
+            cursor.execute(sql_query, (channel_id,))
             result = cursor.fetchall()
             messages = []
             for message in result:
-                sql_query = f"SELECT * FROM message WHERE is_reply = 1 AND replies_to = '{message[0]}';"
-                cursor.execute(sql_query)
+                sql_query = "SELECT * FROM message WHERE is_reply = 1 AND replies_to = ?;"
+                cursor.execute(sql_query, (message[0],))
                 result = cursor.fetchall()
                 number_of_replies = len(result)
                 messages.append([message[0], message[1], message[2], number_of_replies, message[3]])
@@ -138,13 +138,13 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE authkey = '{authkey}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE authkey = ?;"
+            cursor.execute(sql_query, (authkey,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
 
-            sql_query = f'INSERT INTO message (content, username, channel_id, is_reply, replies_to) VALUES (?, ?, ?, ?, ?);'
+            sql_query = 'INSERT INTO message (content, username, channel_id, is_reply, replies_to) VALUES (?, ?, ?, ?, ?);'
             cursor.execute(sql_query, (newReply, username, channel_id, True, message_id))
             connection.commit()
             return {'success': True}
@@ -154,18 +154,18 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE authkey = '{authkey}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE authkey = ?;"
+            cursor.execute(sql_query, (authkey,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
 
-            sql_query = f"SELECT * FROM message WHERE message_id = '{message_id}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM message WHERE message_id = ?;"
+            cursor.execute(sql_query, (message_id,))
             message = cursor.fetchone()
 
-            sql_query = f"SELECT * FROM message WHERE channel_id = '{channel_id}' AND is_reply = 1 AND replies_to = '{message_id}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM message WHERE channel_id = ? AND is_reply = 1 AND replies_to = ?;"
+            cursor.execute(sql_query, (channel_id, message_id))
             result = cursor.fetchall()
             replies = []
             for reply in result:
@@ -178,21 +178,21 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE authkey = '{authkey}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE authkey = ?;"
+            cursor.execute(sql_query, (authkey,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
 
-            sql_query = f"SELECT * FROM user_channel WHERE username = '{username}' AND channel_id = '{channel_id}' AND latest_seen_message_id = '{message_id}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user_channel WHERE username = ? AND channel_id = ? AND latest_seen_message_id = ?;"
+            cursor.execute(sql_query, (username, channel_id, message_id))
             user_channel = cursor.fetchone()
             if not user_channel:
-                sql_query = f'INSERT INTO user_channel (username, channel_id, latest_seen_message_id) VALUES (?, ?, ?);'
+                sql_query = 'INSERT INTO user_channel (username, channel_id, latest_seen_message_id) VALUES (?, ?, ?);'
                 cursor.execute(sql_query, (username, channel_id, message_id))
             else:
-                sql_query = f"UPDATE user_channel SET latest_seen_message_id = '{message_id}' WHERE username = '{username}' AND channel_id = '{channel_id}';"
-                cursor.execute(sql_query)
+                sql_query = "UPDATE user_channel SET latest_seen_message_id = ? WHERE username = ? AND channel_id = ?;"
+                cursor.execute(sql_query, (message_id, username, channel_id))
 
             connection.commit()
             return {'success': True}
@@ -202,13 +202,13 @@ class Database:
         connection = connect(path.join(path.join(path.dirname(__file__), "database"), f"{self.db_name}.db"), check_same_thread=False)
         cursor = connection.cursor()
         with connection:
-            sql_query = f"SELECT * FROM user WHERE authkey = '{authkey}';"
-            cursor.execute(sql_query)
+            sql_query = "SELECT * FROM user WHERE authkey = ?;"
+            cursor.execute(sql_query, (authkey,))
             user = cursor.fetchone()
             if not user:
                 return {'success': False}
 
-            sql_query = f"SELECT * FROM channel ORDER BY channel_id ASC;"
+            sql_query = "SELECT * FROM channel ORDER BY channel_id ASC;"
             cursor.execute(sql_query)
             channels = cursor.fetchall()
             if channels == []:
@@ -216,15 +216,17 @@ class Database:
 
             channel_idCounts = []
             for channel in channels:
-                sql_query = f"SELECT * FROM user_channel WHERE username = '{username}' AND channel_id = '{channel[0]}';"
-                cursor.execute(sql_query)
+                sql_query = "SELECT * FROM user_channel WHERE username = ? AND channel_id = ?;"
+                cursor.execute(sql_query, (username, channel[0]))
                 user_channel = cursor.fetchone()
                 if not user_channel:
-                    sql_query = f"SELECT * FROM message WHERE channel_id = '{channel[0]}' AND is_reply = 0;"
+                    sql_query = "SELECT * FROM message WHERE channel_id = ? AND is_reply = 0;"
+                    sql_parameters = (channel[0],)
                 else:
-                    sql_query = f"SELECT * FROM message WHERE message_id > '{user_channel[2]}' AND channel_id = '{channel[0]}' AND is_reply = 0;"
+                    sql_query = "SELECT * FROM message WHERE message_id > ? AND channel_id = ? AND is_reply = 0;"
+                    sql_parameters = (user_channel[2], channel[0])
 
-                cursor.execute(sql_query)
+                cursor.execute(sql_query, sql_parameters)
                 new_messages = cursor.fetchall()
                 channel_idCounts.append(tuple([channel[0], len(new_messages)]))
 
@@ -252,14 +254,19 @@ def index(channel_id=None, thread_id=None):
 def user_signup():
     if request.method == 'GET':
         username = request.args.get('username')
-        password = request.args.get('password').encode('utf-8')
+        password = request.args.get('password')
+        if not username or not password:
+            return jsonify({'success': False})
 
-        result = DB.check_user(username, password)
+        result = DB.check_user(username, password.encode('utf-8'))
         return jsonify(result)
     elif request.method == 'POST':
-        username = loads(request.data)['username']
-        password = loads(request.data)['password'].encode('utf-8')
-        hashed_password = hashpw(password, gensalt())
+        username = loads(request.data).get('username')
+        password = loads(request.data).get('password')
+        if not username or not password:
+            return jsonify({'success': False})
+
+        hashed_password = hashpw(password.encode('utf-8'), gensalt())
 
         result = DB.create_user(username, hashed_password)
         return jsonify(result)

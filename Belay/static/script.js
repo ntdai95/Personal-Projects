@@ -1,6 +1,9 @@
 /* For auth */
 
 
+const POLLING_INTERVAL = 1000;
+
+
 function signup() {
     let username = document.getElementById("usernamesignup").value;
     let password = document.getElementById("passwordsignup").value;
@@ -98,7 +101,7 @@ function login() {
 
 
 function createChannel() {
-    let channelName = encodeURIComponent(document.getElementById("newChannelName").value);
+    let channelName = document.getElementById("newChannelName").value;
     let authkey = localStorage.getItem("ntdai95_belay_authkey");
 
     fetch("http://127.0.0.1:5000/api/channel", {
@@ -140,7 +143,7 @@ function startChannelPolling() {
     .then(response => response.json())
     .then(data => {
         if (data.success == true) {
-            document.querySelector(".channelColumn h1").innerHTML = "Welcome, " + localStorage.getItem('ntdai95_belay_username') + "!";
+            document.querySelector(".channelColumn h1").textContent = "Welcome, " + localStorage.getItem('ntdai95_belay_username') + "!";
             let channelTable = document.getElementsByClassName("channelTable");
             let channels = data.channels;
 
@@ -156,7 +159,7 @@ function startChannelPolling() {
                         button.setAttribute("value", "Go");
                         button.setAttribute("onclick", "goToChannel('" + channels[i][0] + "');");
 
-                        button.innerHTML = decodeURIComponent(channels[i][1]);
+                        button.textContent = channels[i][1];
                         td.appendChild(button);
                         tr.appendChild(td);
                         channelTable[0].appendChild(tr);
@@ -168,7 +171,7 @@ function startChannelPolling() {
         }
 
         if (window.location.pathname.startsWith('/channel')) {
-            startCountPolling();
+            setTimeout(startCountPolling, POLLING_INTERVAL);
         }
     })
     .catch(error => {
@@ -229,7 +232,7 @@ function startCountPolling() {
         }
 
         if (window.location.pathname.startsWith('/channel')) {
-            startChannelPolling();
+            setTimeout(startChannelPolling, POLLING_INTERVAL);
         }
     })
     .catch(error => {
@@ -253,7 +256,7 @@ function goToChannel(channel_id) {
 
 
 function postMessage() {
-    let newMessage = encodeURIComponent(document.getElementById("newMessage").value);
+    let newMessage = document.getElementById("newMessage").value;
     let authkey = localStorage.getItem("ntdai95_belay_authkey");
     let username = localStorage.getItem('ntdai95_belay_username');
 
@@ -322,7 +325,7 @@ function startMessagePolling() {
             let messageContent = document.querySelector(".messageContent");
             let messages = data.messages;
 
-            if (document.querySelector("#channelID" + history.state["channel_id"]) == null || messageContent.length != messages.length) {
+            if (document.querySelector("#channelID" + history.state["channel_id"]) == null || messageContent.children.length != messages.length) {
                 messageContent.innerHTML = "";
             }
 
@@ -335,9 +338,9 @@ function startMessagePolling() {
                         let message = document.createElement('message');
                         message.setAttribute("id", "message" + messages[i][0]);
                         let author = document.createElement('author');
-                        author.innerHTML = messages[i][2];
+                        author.textContent = messages[i][2];
                         let content = document.createElement('content');
-                        let text = decodeURIComponent(messages[i][1]);
+                        let text = messages[i][1];
                         let urls = getImageURLs(text);
 
                         if (urls) {
@@ -345,7 +348,7 @@ function startMessagePolling() {
                                 text = text.replace(urls[i][0], "");
                             }
 
-                            content.innerHTML = text;
+                            content.textContent = text;
 
                             for (let i = 0; i < urls.length; i++) {
                                 let p = document.createElement("p");
@@ -355,7 +358,7 @@ function startMessagePolling() {
                                 content.appendChild(p);
                             }
                         } else {
-                            content.innerHTML = text;
+                            content.textContent = text;
                         }
 
                         let button = document.createElement('button');
@@ -382,7 +385,7 @@ function startMessagePolling() {
         }
 
         if (window.location.pathname.startsWith('/channel/') && window.location.pathname.includes('/thread/') == false) {
-            startMessagePolling();
+            setTimeout(startMessagePolling, POLLING_INTERVAL);
         }
     })
     .catch(error => {
@@ -406,7 +409,7 @@ function goToThread(message_id) {
 
 
 function replyMessage() {
-    let newReply = encodeURIComponent(document.getElementById("newReply").value);
+    let newReply = document.getElementById("newReply").value;
     let username = localStorage.getItem('ntdai95_belay_username');
     let authkey = localStorage.getItem("ntdai95_belay_authkey");
 
@@ -459,9 +462,9 @@ function startReplyPolling() {
                 h3Message.innerHTML = "Message:";
                 let message = document.createElement('message');
                 let author = document.createElement('author');
-                author.innerHTML = data.message[2];
+                author.textContent = data.message[2];
                 let content = document.createElement('content');
-                let text = decodeURIComponent(data.message[1]);
+                let text = data.message[1];
                 let urls = getImageURLs(text);
 
                 if (urls) {
@@ -469,7 +472,7 @@ function startReplyPolling() {
                         text = text.replace(urls[i][0], "");
                     }
 
-                    content.innerHTML = text;
+                    content.textContent = text;
 
                     for (let i = 0; i < urls.length; i++) {
                         let p = document.createElement("p");
@@ -479,7 +482,7 @@ function startReplyPolling() {
                         content.appendChild(p);
                     }
                 } else {
-                    content.innerHTML = text;
+                    content.textContent = text;
                 }
 
                 let button = document.createElement('button');
@@ -519,9 +522,9 @@ function startReplyPolling() {
                         let message = document.createElement('message');
                         message.setAttribute("id", "reply_id" + replies[i][0]);
                         let author = document.createElement('author');
-                        author.innerHTML = replies[i][2];
+                        author.textContent = replies[i][2];
                         let content = document.createElement('content');
-                        let text = decodeURIComponent(replies[i][1]);
+                        let text = replies[i][1];
                         let urls = getImageURLs(text);
 
                         if (urls) {
@@ -529,7 +532,7 @@ function startReplyPolling() {
                                 text = text.replace(urls[i][0], "");
                             }
 
-                            content.innerHTML = text;
+                            content.textContent = text;
 
                             for (let i = 0; i < urls.length; i++) {
                                 let p = document.createElement("p");
@@ -539,7 +542,7 @@ function startReplyPolling() {
                                 content.appendChild(p);
                             }
                         } else {
-                            content.innerHTML = text;
+                            content.textContent = text;
                         }
 
                         message.appendChild(author);
@@ -553,7 +556,7 @@ function startReplyPolling() {
         }
 
         if (window.location.pathname.includes('/thread/')) {
-            startReplyPolling();
+            setTimeout(startReplyPolling, POLLING_INTERVAL);
         }
     })
     .catch(error => {
@@ -596,7 +599,12 @@ function checkAuthkey() {
     let pushStateUrl = "";
 
     if (authkey === null || authkey === "null") {
-        localStorage.setItem("ntdai95_belay_magiclink", document.URL);
+        if (window.location.pathname.startsWith("/channel")) {
+            localStorage.setItem("ntdai95_belay_magiclink", document.URL);
+        } else {
+            localStorage.setItem("ntdai95_belay_magiclink", null);
+        }
+
         pushStateUnused = "Login/Signup Page";
         pushStateUrl = "http://127.0.0.1:5000";
     } else {
