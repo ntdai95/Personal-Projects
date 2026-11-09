@@ -156,7 +156,7 @@ class Main:
             try:
                 self.given_numbers[index // 9][index % 9] = int(value["value"])
                 self.entered_numbers_for_game_solution[index // 9][index % 9] = int(value["value"])
-            except:
+            except Exception:
                 pass
 
 ### Running the solver related functions only ###

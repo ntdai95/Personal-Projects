@@ -28,7 +28,7 @@ class Client:
                 Message.receiving_file(filename=server_message["filename"],
                                        client_socket=self.__client_socket,
                                        network_buffer_size=self.__buffer_size)
-        except:
+        except Exception:
             server_message = {"success": False,
                               "message": "Server is temporarily "
                                          "unavailable. Try again later!"}
