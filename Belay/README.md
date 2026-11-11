@@ -1,6 +1,6 @@
 # Belay Real-Time Chat Application
 
-Belay is a Slack-style chat application. The server is Flask over SQLite and the front
+Belay is a Slack-style chat application, completed for Web Development (MPCS 52553) at the University of Chicago. The server is Flask over SQLite and the front
 end is plain JavaScript with no framework. It supports accounts with hashed passwords,
 channels, threaded replies, per-channel unread counts, and links that take you to the
 exact message you were sent after you log in.
